@@ -12,7 +12,7 @@ val appVersion = AppVersion(1, 1, 1)
 @Suppress("SpellCheckingInspection")
 val packageId = "com.xigong.xiaozhuan"
 
-val appName = "小篆传包"
+val appName = "多平台一键上架"
 
 @Suppress("SpellCheckingInspection")
 val appNameEn = "XiaoZhuan"

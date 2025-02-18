@@ -1,7 +1,7 @@
 package com.xigong.xiaozhuan.channel.huawei
 
-import com.xigong.xiaozhuan.channel.MarketInfo
 import com.xigong.xiaozhuan.channel.ChannelTask
+import com.xigong.xiaozhuan.channel.MarketInfo
 import com.xigong.xiaozhuan.log.AppLogger
 import com.xigong.xiaozhuan.util.ApkInfo
 import java.io.File
@@ -26,7 +26,12 @@ class HuaweiChannelTask : ChannelTask() {
         clientSecret = params[CLIENT_SECRET] ?: ""
     }
 
-    override suspend fun performUpload(file: File, apkInfo: ApkInfo, updateDesc: String, progress: (Int) -> Unit) {
+    override suspend fun performUpload(
+        file: File,
+        apkInfo: ApkInfo,
+        updateDesc: String,
+        progress: (Int) -> Unit
+    ) {
         connectClient.uploadApk(file, apkInfo, clientId, clientSecret, updateDesc) {
             progress((it * 100).roundToInt())
         }

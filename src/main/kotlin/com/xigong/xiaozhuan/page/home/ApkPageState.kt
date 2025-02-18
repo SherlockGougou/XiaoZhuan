@@ -1,6 +1,10 @@
 package com.xigong.xiaozhuan.page.home
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AtomicReference
 import com.xigong.xiaozhuan.AppPath
 import com.xigong.xiaozhuan.channel.ChannelRegistry
@@ -16,7 +20,12 @@ import com.xigong.xiaozhuan.util.FileSelector
 import com.xigong.xiaozhuan.util.FileUtil
 import com.xigong.xiaozhuan.util.getApkInfo
 import com.xigong.xiaozhuan.widget.Toast
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.io.File
 
 class ApkPageState(val apkConfig: ApkConfig) {
@@ -30,7 +39,8 @@ class ApkPageState(val apkConfig: ApkConfig) {
     val updateDesc = mutableStateOf(apkConfig.extension.updateDesc ?: "")
 
 
-    val channels: List<ChannelTask> = ChannelRegistry.channels.filter { apkConfig.channelEnable(it.channelName) }
+    val channels: List<ChannelTask> =
+        ChannelRegistry.channels.filter { apkConfig.channelEnable(it.channelName) }
 
     /**
      * 选中的Channel
@@ -166,7 +176,10 @@ class ApkPageState(val apkConfig: ApkConfig) {
     /**
      * 检查当前渠道是否支持提交
      */
-    private fun checkChannelEnableSubmit(channelName: String, message: AtomicReference<String>? = null): Boolean {
+    private fun checkChannelEnableSubmit(
+        channelName: String,
+        message: AtomicReference<String>? = null
+    ): Boolean {
         val task = taskLaunchers.firstOrNull { it.name == channelName } ?: return false
         val marketInfo = (task.getMarketState().value as? MarketState.Success)?.info
         val apkInfo = getApkInfoState().value

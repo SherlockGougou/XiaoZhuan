@@ -18,16 +18,16 @@ fun Section(
     title: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-   Column {
-       Text(
-           title,
-           color = Color.Black,
-           fontSize = 16.sp,
-           fontWeight = FontWeight.Bold
-       )
-       Spacer(Modifier.height(12.dp))
-       Column {
-           content()
-       }
-   }
+    Column {
+        Text(
+            title,
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(12.dp))
+        Column {
+            content()
+        }
+    }
 }

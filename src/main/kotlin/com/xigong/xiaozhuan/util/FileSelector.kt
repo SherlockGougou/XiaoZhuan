@@ -9,7 +9,9 @@ import kotlinx.coroutines.withContext
 import java.awt.Window
 import java.io.File
 import javax.swing.JFileChooser
-import javax.swing.JFileChooser.*
+import javax.swing.JFileChooser.APPROVE_OPTION
+import javax.swing.JFileChooser.DIRECTORIES_ONLY
+import javax.swing.JFileChooser.FILES_ONLY
 import javax.swing.filechooser.FileNameExtensionFilter
 
 private val fileSelector = if (isWindows()) JFileSelector else FileKitSelector
@@ -29,7 +31,11 @@ interface FileSelector {
      * @param desc 描述
      * @param extensions 文件名扩展名,不可为空
      */
-    suspend fun selectedFile(defaultFile: File? = null, desc: String?, extensions: List<String>): File?
+    suspend fun selectedFile(
+        defaultFile: File? = null,
+        desc: String?,
+        extensions: List<String>
+    ): File?
 
     companion object : FileSelector by fileSelector
 
@@ -80,7 +86,11 @@ private object FileKitSelector : FileSelector {
         )?.file
     }
 
-    override suspend fun selectedFile(defaultFile: File?, desc: String?, extensions: List<String>): File? {
+    override suspend fun selectedFile(
+        defaultFile: File?,
+        desc: String?,
+        extensions: List<String>
+    ): File? {
         return FileKit.pickFile(
             mode = PickerMode.Single,
             type = PickerType.File(extensions),

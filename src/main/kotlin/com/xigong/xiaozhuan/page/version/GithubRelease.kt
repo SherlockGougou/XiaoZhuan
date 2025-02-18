@@ -2,7 +2,6 @@ package com.xigong.xiaozhuan.page.version
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlin.jvm.Throws
 
 @JsonClass(generateAdapter = false)
 data class GithubRelease(
@@ -19,6 +18,6 @@ data class GithubRelease(
 ) {
     @Throws
     fun toAppVersion(): AppVersion {
-        return AppVersion.from(tagName,name)
+        return AppVersion.from(tagName, name)
     }
 }

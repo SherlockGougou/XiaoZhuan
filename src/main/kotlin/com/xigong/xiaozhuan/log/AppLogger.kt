@@ -2,10 +2,15 @@ package com.xigong.xiaozhuan.log
 
 import com.xigong.xiaozhuan.AppPath
 import com.xigong.xiaozhuan.BuildConfig
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.io.Writer
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
@@ -64,7 +69,8 @@ private object DefaultLogger : AppLogger {
 
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
-    private val loggerExecutor = Executors.newSingleThreadExecutor { Thread(it).apply { name = "Logger" } }
+    private val loggerExecutor =
+        Executors.newSingleThreadExecutor { Thread(it).apply { name = "Logger" } }
 
     init {
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())

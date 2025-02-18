@@ -21,7 +21,12 @@ class VIVOChannelTask : ChannelTask() {
         marketClient = VIVOMarketClient(accessKey, accessSecret)
     }
 
-    override suspend fun performUpload(file: File, apkInfo: ApkInfo, updateDesc: String, progress: (Int) -> Unit) {
+    override suspend fun performUpload(
+        file: File,
+        apkInfo: ApkInfo,
+        updateDesc: String,
+        progress: (Int) -> Unit
+    ) {
         requireNotNull(marketClient).submit(file, apkInfo, updateDesc, progress)
 
     }

@@ -11,9 +11,7 @@ data class HWTokenParams(
     val clientSecret: String,
     @Json(name = "grant_type")
     val type: String = "client_credentials"
-) {
-
-}
+)
 
 @JsonClass(generateAdapter = false)
 data class HWTokenResp(

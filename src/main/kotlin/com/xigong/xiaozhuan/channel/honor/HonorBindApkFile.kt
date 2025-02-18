@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class HonorBindApkFile(
     @Json(name = "bindingFileList")
     val items: List<Item>,
-){
+) {
     data class Item(
         @Json(name = "objectId")
         val objectId: Long,

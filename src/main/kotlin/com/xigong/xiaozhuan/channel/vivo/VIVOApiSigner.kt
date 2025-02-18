@@ -1,7 +1,7 @@
 package com.xigong.xiaozhuan.channel.vivo
 
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Collections
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 

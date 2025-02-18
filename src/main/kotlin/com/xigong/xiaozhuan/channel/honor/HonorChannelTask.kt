@@ -28,7 +28,12 @@ class HonorChannelTask : ChannelTask() {
         clientSecret = params[CLIENT_SECRET] ?: ""
     }
 
-    override suspend fun performUpload(file: File, apkInfo: ApkInfo, updateDesc: String, progress: (Int) -> Unit) {
+    override suspend fun performUpload(
+        file: File,
+        apkInfo: ApkInfo,
+        updateDesc: String,
+        progress: (Int) -> Unit
+    ) {
         connectClient.uploadApk(file, apkInfo, clientId, clientSecret, updateDesc) {
             progress((it * 100).roundToInt())
         }

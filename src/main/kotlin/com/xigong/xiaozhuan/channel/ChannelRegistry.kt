@@ -26,7 +26,8 @@ object ChannelRegistry {
         MockChannelTask("VIVO", "VIVO"),
     )
 
-    val channels: List<ChannelTask> = if (DEBUG_TASK && BuildConfig.debug) mockChannels else realChannels
+    val channels: List<ChannelTask> =
+        if (DEBUG_TASK && BuildConfig.debug) mockChannels else realChannels
 
 
     fun getChannel(name: String): ChannelTask? {

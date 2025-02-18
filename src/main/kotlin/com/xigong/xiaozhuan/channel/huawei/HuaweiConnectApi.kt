@@ -9,7 +9,12 @@ import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 import java.io.File
 
 fun HuaweiConnectApi(): HuaweiConnectApi {
@@ -83,7 +88,7 @@ interface HuaweiConnectApi {
         @Header("client_id") clientId: String,
         @Header("Authorization") token: String,
         @Query("appId") appId: String,
-        @Query("pkgIds") pkgIds: String ,
+        @Query("pkgIds") pkgIds: String,
     ): HWApkState
 
 

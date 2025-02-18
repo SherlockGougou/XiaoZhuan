@@ -1,8 +1,8 @@
 package com.xigong.xiaozhuan.channel.oppo
 
+import com.google.gson.JsonObject
 import com.xigong.xiaozhuan.channel.MarketInfo
 import com.xigong.xiaozhuan.channel.ReviewState
-import com.google.gson.JsonObject
 
 data class OPPOAppInfo(val obj: JsonObject) {
 

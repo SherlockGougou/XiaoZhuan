@@ -1,7 +1,14 @@
 package com.xigong.xiaozhuan.page.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -43,19 +50,21 @@ private fun ColumnScope.LeftPage(apkConfig: ApkConfig, viewModel: ApkPageState) 
             modifier = Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
                 .background(AppColors.cardBackground)
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             val apkInfo = viewModel.getApkInfoState().value
             val version = apkInfo?.versionName?.let { "v${it}" }
+            val code = apkInfo?.versionCode?.toString()
             val apkPath = viewModel.getApkDirState().value?.path ?: ""
-            item("文件:", apkPath ?: "")
-            Spacer(Modifier.height(12.dp))
-            item("版本:", version ?: "")
-
-            Spacer(Modifier.height(12.dp))
+            item("文件:", apkPath)
+            Spacer(Modifier.height(5.dp))
+            item("版本Name:", version ?: "")
+            Spacer(Modifier.height(5.dp))
+            item("版本Code:", code ?: "")
+            Spacer(Modifier.height(5.dp))
             item("大小:", viewModel.getFileSize())
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(5.dp))
         Button(
             colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = AppColors.primary,
@@ -89,9 +98,9 @@ private fun ApkInfoBox(apkConfig: ApkConfig) {
     ) {
 
         item("名称:", apkConfig.name)
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(5.dp))
         item("包名:", apkConfig.applicationId)
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(5.dp))
         item("渠道包:", if (apkConfig.enableChannel) "是" else "否")
     }
 }
@@ -104,7 +113,7 @@ private fun item(title: String, desc: String) {
             color = AppColors.fontGray,
             fontSize = 14.sp,
         )
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(5.dp))
         Text(
             desc,
             color = AppColors.fontBlack,
@@ -112,6 +121,3 @@ private fun item(title: String, desc: String) {
         )
     }
 }
-
-
-

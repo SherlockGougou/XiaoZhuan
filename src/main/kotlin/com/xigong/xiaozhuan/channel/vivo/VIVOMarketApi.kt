@@ -1,12 +1,12 @@
 package com.xigong.xiaozhuan.channel.vivo
 
+import com.google.gson.JsonObject
 import com.xigong.xiaozhuan.OkHttpFactory
 import com.xigong.xiaozhuan.channel.checkApiSuccess
 import com.xigong.xiaozhuan.util.FileUtil
 import com.xigong.xiaozhuan.util.ProgressBody
 import com.xigong.xiaozhuan.util.ProgressChange
 import com.xigong.xiaozhuan.util.getJsonResult
-import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl

@@ -23,7 +23,12 @@ import com.xigong.xiaozhuan.style.AppShapes
 
 
 @Composable
-fun PositiveButton(text: String, fontSize: TextUnit = 14.sp, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun PositiveButton(
+    text: String,
+    fontSize: TextUnit = 14.sp,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .clip(AppShapes.roundButton)
@@ -43,7 +48,12 @@ fun PositiveButton(text: String, fontSize: TextUnit = 14.sp, modifier: Modifier 
 }
 
 @Composable
-fun NegativeButton(text: String, fontSize: TextUnit = 14.sp, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun NegativeButton(
+    text: String,
+    fontSize: TextUnit = 14.sp,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     val hoverSource = remember { MutableInteractionSource() }
     val hovered = hoverSource.collectIsHoveredAsState().value
     val borderColor = if (hovered) AppColors.primary else AppColors.fontGray

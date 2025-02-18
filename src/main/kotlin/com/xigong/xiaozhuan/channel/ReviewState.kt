@@ -10,6 +10,9 @@ enum class ReviewState(val desc: String) {
     /** 审核中 */
     UnderReview("审核中"),
 
+    /** 审核中 */
+    UnderReviewXiaomi("审核中(此处版本不准确)"),
+
     /*** 被拒绝 */
     Rejected("被拒绝"),
 

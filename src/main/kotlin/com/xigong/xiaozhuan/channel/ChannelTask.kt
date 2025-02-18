@@ -4,7 +4,6 @@ import com.xigong.xiaozhuan.log.AppLogger
 import com.xigong.xiaozhuan.util.ApkInfo
 import com.xigong.xiaozhuan.util.getApkInfo
 import java.io.File
-import kotlin.jvm.Throws
 
 abstract class ChannelTask {
 
@@ -73,7 +72,12 @@ abstract class ChannelTask {
      * 执行结束，表示上传成功，抛出异常代表出错
      */
     @Throws
-    abstract suspend fun performUpload(file: File, apkInfo: ApkInfo, updateDesc: String, progress: (Int) -> Unit)
+    abstract suspend fun performUpload(
+        file: File,
+        apkInfo: ApkInfo,
+        updateDesc: String,
+        progress: (Int) -> Unit
+    )
 
 
     /**

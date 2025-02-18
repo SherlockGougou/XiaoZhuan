@@ -1,8 +1,11 @@
 package com.xigong.xiaozhuan.page.home
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.CursorDropdownMenu
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Text
@@ -13,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xigong.xiaozhuan.style.AppColors
 import com.xigong.xiaozhuan.AppPath
+import com.xigong.xiaozhuan.style.AppColors
 import com.xigong.xiaozhuan.widget.Toast
 import java.awt.Desktop
 import java.io.IOException
@@ -23,7 +26,7 @@ import java.io.IOException
 @Composable
 fun MenuDialog(listener: MenuDialogListener, onDismiss: () -> Unit) {
     DropdownMenu(true, onDismissRequest = onDismiss, modifier = Modifier.padding(0.dp)) {
-        Column(modifier = Modifier.width(200.dp)) {
+        Column(modifier = Modifier.width(180.dp)) {
             item("新增") {
                 onDismiss()
                 listener.onAddClick()
@@ -68,7 +71,7 @@ private fun openApkDispatchDir() {
 }
 
 interface MenuDialogListener {
-    fun onAddClick();
+    fun onAddClick()
     fun onEditClick()
     fun onDeleteClick()
     fun onAboutSoftClick()
@@ -81,7 +84,7 @@ private fun item(title: String, color: Color = AppColors.fontBlack, onClick: () 
         .clickable {
             onClick()
         }
-        .padding(vertical = 20.dp)) {
+        .padding(vertical = 12.dp)) {
         Text(
             text = title,
             color = color,

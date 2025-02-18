@@ -1,12 +1,37 @@
 package com.xigong.xiaozhuan.page.home
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +58,7 @@ import kotlin.time.Duration.Companion.seconds
 fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
-            .padding(20.dp)
+            .padding(12.dp)
     ) {
         Column(modifier = Modifier.weight(1f).fillMaxWidth()) {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -44,8 +69,7 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(Modifier.weight(1f))
-
-                Box(modifier = Modifier.size(40.dp)) {
+                Box(modifier = Modifier.size(40.dp).align(Alignment.CenterVertically)) {
                     if (viewModel.loadingMarkState) {
                         CircularProgressIndicator(
                             color = AppColors.primary,
@@ -65,17 +89,14 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                         )
                     }
                 }
-                Spacer(Modifier.width(10.dp))
             }
-            Spacer(Modifier.height(12.dp))
-
             val scrollState = rememberScrollState()
             Row(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier.verticalScroll(scrollState)
                         .weight(1f)
                 ) {
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(5.dp))
                     viewModel.channels.withIndex().forEach { (index, chan) ->
                         val selected = viewModel.selectedChannels.contains(chan.channelName)
                         val name = chan.channelName
@@ -86,7 +107,7 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                         ChannelView(selected, name, desc, marketState) { checked ->
                             viewModel.selectChannel(name, checked)
                         }
-                        Spacer(modifier = Modifier.height(15.dp))
+                        Spacer(modifier = Modifier.height(5.dp))
                     }
                 }
                 VerticalScrollbar(
@@ -161,7 +182,11 @@ private fun tryReloadMarketState(viewModel: ApkPageState) {
 
 
 @Composable
-private fun showConfirmDialog(viewModel: ApkPageState, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+private fun showConfirmDialog(
+    viewModel: ApkPageState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
     val apkInfo = viewModel.getApkInfoState().value ?: return
     val selectedChannels = viewModel.selectedChannels
     val message = buildString {
@@ -205,70 +230,71 @@ private fun ChannelView(
     marketState: MarketState?,
     onCheckChange: (Boolean) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(AppColors.cardBackground)
-            .clickable {
-                onCheckChange(!selected)
-            }
-            .padding(16.dp)
-    ) {
-        Checkbox(
-            selected,
-            onCheckedChange = onCheckChange,
-            colors = CheckboxDefaults.colors(checkedColor = AppColors.primary)
-        )
-        Text(
-            name,
-            fontSize = 14.sp,
-            color = AppColors.fontBlack,
-            modifier = Modifier.requiredWidthIn(min = 50.dp)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            desc ?: "",
-            fontSize = 12.sp,
-            color = AppColors.fontGray
-        )
-        Spacer(modifier = Modifier.weight(1.0f))
-        val state = when (marketState) {
-            null -> ""
-            is MarketState.Loading -> "加载中"
-            is MarketState.Success -> {
-                val info = marketState.info
-                "v${info.lastVersionName} ${info.reviewState.desc}"
-            }
-
-            is MarketState.Error -> {
-                "获取状态失败"
-            }
-        }
-        Text(
-            state,
-            fontSize = 12.sp,
-            color = AppColors.fontBlack
-        )
-        if (marketState is MarketState.Error) {
-            Row {
-                var showError by remember { mutableStateOf(false) }
-                if (showError) {
-                    ErrorPopup(marketState.exception) {
-                        showError = false
-                    }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(AppColors.cardBackground)
+                .clickable {
+                    onCheckChange(!selected)
                 }
-                Spacer(Modifier.width(8.dp))
-                Image(
-                    painterResource("error_info.png"),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.Red),
-                    modifier = Modifier.size(22.dp)
-                        .clickable {
-                            showError = true
+                .padding(16.dp)
+        ) {
+            Checkbox(
+                selected,
+                onCheckedChange = onCheckChange,
+                colors = CheckboxDefaults.colors(checkedColor = AppColors.primary)
+            )
+            Text(
+                name,
+                fontSize = 14.sp,
+                color = AppColors.fontBlack,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                desc ?: "",
+                fontSize = 12.sp,
+                color = AppColors.fontGray
+            )
+            Spacer(modifier = Modifier.weight(1.0f))
+            val state = when (marketState) {
+                null -> ""
+                is MarketState.Loading -> "加载中"
+                is MarketState.Success -> {
+                    val info = marketState.info
+                    "v${info.lastVersionName} ${info.reviewState.desc}"
+                }
+
+                is MarketState.Error -> {
+                    "获取状态失败"
+                }
+            }
+            Text(
+                state,
+                fontSize = 12.sp,
+                color = AppColors.fontBlack
+            )
+            if (marketState is MarketState.Error) {
+                Row {
+                    var showError by remember { mutableStateOf(false) }
+                    if (showError) {
+                        ErrorPopup(marketState.exception) {
+                            showError = false
                         }
-                )
+                    }
+                    Spacer(Modifier.width(5.dp))
+                    Image(
+                        painterResource("error_info.png"),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color.Red),
+                        modifier = Modifier.size(22.dp)
+                            .clickable {
+                                showError = true
+                            }
+                    )
+                }
             }
         }
     }

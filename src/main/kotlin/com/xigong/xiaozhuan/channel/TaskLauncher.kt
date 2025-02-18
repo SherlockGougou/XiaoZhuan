@@ -76,13 +76,14 @@ class TaskLauncher(private val task: ChannelTask) {
     private fun getParams(): Map<ChannelTask.Param, String?> {
         val channelParams = channelParams.associateBy { it.name }
         val saveParams = channelParams[task.channelName]?.params
-        val getParam = { p: ChannelTask.Param -> saveParams?.firstOrNull { it.name == p.name }?.value }
+        val getParam =
+            { p: ChannelTask.Param -> saveParams?.firstOrNull { it.name == p.name }?.value }
         return task.getParams().associateWith { p -> getParam(p) }
     }
 
     private fun findApkFile(apkDir: File): File {
         val apks = AppPath.listApk(apkDir)
-        val fileId = channelParams.firstOrNull() { it.name == name }
+        val fileId = channelParams.firstOrNull { it.name == name }
             ?.getParam(ChannelTask.FILE_NAME_IDENTIFY)
             ?.value
             ?: task.fileNameIdentify
@@ -96,7 +97,8 @@ class TaskLauncher(private val task: ChannelTask) {
 
 }
 
-private class SubmitStateAdapter(private val updateState: (SubmitState) -> Unit) : ChannelTask.SubmitStateListener {
+private class SubmitStateAdapter(private val updateState: (SubmitState) -> Unit) :
+    ChannelTask.SubmitStateListener {
     override fun onStart() {
         updateState(SubmitState.Uploading(0))
     }

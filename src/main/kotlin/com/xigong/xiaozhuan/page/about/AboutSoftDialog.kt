@@ -7,7 +7,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +46,12 @@ fun AboutSoftDialog(onDismiss: () -> Unit) {
             .background(Color.White)
             .padding(20.dp),
     ) {
-        Text("关于软件", color = AppColors.fontBlack, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+        Text(
+            "关于软件",
+            color = AppColors.fontBlack,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp
+        )
         Spacer(Modifier.height(26.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             Image(

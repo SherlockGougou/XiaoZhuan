@@ -27,7 +27,11 @@ fun ChannelConfigPage(
         modifier =
         Modifier.verticalScroll(rememberScrollState())
     ) {
-        CheckboxRow(modifier = Modifier.padding(vertical = 8.dp), name = "是否启用", check = config.enable) {
+        CheckboxRow(
+            modifier = Modifier.padding(vertical = 8.dp),
+            name = "是否启用",
+            check = config.enable
+        ) {
             onConfigChange(config.copy(enable = it))
         }
         Column(
@@ -49,7 +53,12 @@ fun ChannelConfigPage(
                     }
 
                     is ParmaType.TextFile -> {
-                        TextFileRaw(param.name, param.desc ?: "", paramValue.value, param.type) { newValue ->
+                        TextFileRaw(
+                            param.name,
+                            param.desc ?: "",
+                            paramValue.value,
+                            param.type
+                        ) { newValue ->
                             onConfigChange(createNewChannel(config, paramValue, newValue))
                         }
                     }

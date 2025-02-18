@@ -1,11 +1,8 @@
 package com.xigong.xiaozhuan.channel.mi
 
 import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
 import java.security.PublicKey
 import java.security.Security
 import java.security.cert.CertificateFactory
@@ -29,9 +26,8 @@ object MiApiSigner {
      * 加载BC库
      */
     init {
-        Security.addProvider(BouncyCastleProvider());
+        Security.addProvider(BouncyCastleProvider())
     }
-
 
 
     /**
@@ -78,7 +74,6 @@ object MiApiSigner {
         }
         return Hex.encodeHexString(baos.toByteArray())
     }
-
 
 
 }

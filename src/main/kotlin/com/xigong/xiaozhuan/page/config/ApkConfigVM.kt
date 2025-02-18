@@ -94,7 +94,10 @@ class ApkConfigVM(
         )
     }
 
-    private fun createChannelConfig(name: String, oldChannel: ApkConfig.Channel?): ApkConfig.Channel {
+    private fun createChannelConfig(
+        name: String,
+        oldChannel: ApkConfig.Channel?
+    ): ApkConfig.Channel {
         val params = ChannelRegistry.getChannel(name)?.getParams()?.map {
             val oldValue = oldChannel?.getParam(it.name)?.value
             ApkConfig.Param(it.name, oldValue ?: it.defaultValue ?: "")

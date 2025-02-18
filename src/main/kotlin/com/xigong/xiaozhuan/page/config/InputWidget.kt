@@ -2,8 +2,18 @@ package com.xigong.xiaozhuan.page.config
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -120,7 +130,12 @@ private suspend fun selectedTextFile(
 
 
 @Composable
-fun CheckboxRow(modifier: Modifier = Modifier, name: String, check: Boolean, onCheckedChange: (Boolean) -> Unit) {
+fun CheckboxRow(
+    modifier: Modifier = Modifier,
+    name: String,
+    check: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
         .clip(AppShapes.roundButton)
         .fillMaxWidth()

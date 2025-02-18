@@ -1,6 +1,5 @@
 package com.xigong.xiaozhuan.widget
 
-import com.xigong.xiaozhuan.style.AppColors
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -17,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.xigong.xiaozhuan.style.AppColors
 
 class UpdateTypeView {
 

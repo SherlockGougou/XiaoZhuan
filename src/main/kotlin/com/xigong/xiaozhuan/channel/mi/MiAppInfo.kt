@@ -1,11 +1,11 @@
 package com.xigong.xiaozhuan.channel.mi
 
-import com.xigong.xiaozhuan.MoshiFactory
-import com.xigong.xiaozhuan.channel.MarketInfo
-import com.xigong.xiaozhuan.channel.ReviewState
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
+import com.xigong.xiaozhuan.MoshiFactory
+import com.xigong.xiaozhuan.channel.MarketInfo
+import com.xigong.xiaozhuan.channel.ReviewState
 
 @JsonClass(generateAdapter = false)
 data class MiAppInfoResp(
@@ -34,7 +34,7 @@ data class MiAppInfoResp(
     }
 
     fun toMarketState(): MarketInfo {
-        val state = if (updateVersion) ReviewState.Online else ReviewState.UnderReview
+        val state = if (updateVersion) ReviewState.Online else ReviewState.UnderReviewXiaomi
         return MarketInfo(
             reviewState = state,
             enableSubmit = updateVersion,

@@ -1,11 +1,18 @@
 package com.xigong.xiaozhuan.widget
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,9 +64,20 @@ fun ConfirmDialog(
                 .background(Color.White)
                 .padding(20.dp),
         ) {
-            Text(title, color = AppColors.fontBlack, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+            Text(
+                title,
+                color = AppColors.fontBlack,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp
+            )
             Spacer(Modifier.height(14.dp))
-            Text(message, color = AppColors.fontGray, fontSize = 14.sp, maxLines = 8, lineHeight = 28.sp)
+            Text(
+                message,
+                color = AppColors.fontGray,
+                fontSize = 14.sp,
+                maxLines = 8,
+                lineHeight = 28.sp
+            )
             Spacer(Modifier.height(18.dp))
             Row {
                 Spacer(Modifier.weight(1f))

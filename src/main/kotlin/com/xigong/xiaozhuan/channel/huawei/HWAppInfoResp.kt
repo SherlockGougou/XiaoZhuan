@@ -1,9 +1,9 @@
 package com.xigong.xiaozhuan.channel.huawei
 
-import com.xigong.xiaozhuan.channel.MarketInfo
-import com.xigong.xiaozhuan.channel.ReviewState
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.xigong.xiaozhuan.channel.MarketInfo
+import com.xigong.xiaozhuan.channel.ReviewState
 
 @JsonClass(generateAdapter = false)
 data class HWAppInfoResp(

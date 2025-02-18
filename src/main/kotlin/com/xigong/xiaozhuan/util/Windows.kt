@@ -1,6 +1,6 @@
 package com.xigong.xiaozhuan.util
 
-import java.util.*
+import java.util.Locale
 
 /**
  * 当前系统是不是windows

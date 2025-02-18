@@ -1,13 +1,13 @@
 package com.xigong.xiaozhuan.channel.oppo
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.xigong.xiaozhuan.OkHttpFactory
 import com.xigong.xiaozhuan.channel.checkApiSuccess
 import com.xigong.xiaozhuan.util.ApkInfo
 import com.xigong.xiaozhuan.util.ProgressBody
 import com.xigong.xiaozhuan.util.ProgressChange
 import com.xigong.xiaozhuan.util.getJsonResult
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -40,16 +40,17 @@ class OPPOMaretApi(
     /**
      * 获取App信息
      */
-    suspend fun getAppInfo(token: String, packageName: String): OPPOAppInfo = withContext(Dispatchers.IO) {
-        val params = mapOf(
-            "pkg_name" to packageName
-        )
-        val requestUrl = getRequestUrl("${DOMAIN}/resource/v1/app/info", params, token, true)
-        val request = Request.Builder().url(requestUrl).get().build()
-        val result = okHttpClient.getJsonResult(request)
-        result.checkSuccess("获取App信息")
-        OPPOAppInfo(result.get("data").asJsonObject)
-    }
+    suspend fun getAppInfo(token: String, packageName: String): OPPOAppInfo =
+        withContext(Dispatchers.IO) {
+            val params = mapOf(
+                "pkg_name" to packageName
+            )
+            val requestUrl = getRequestUrl("${DOMAIN}/resource/v1/app/info", params, token, true)
+            val request = Request.Builder().url(requestUrl).get().build()
+            val result = okHttpClient.getJsonResult(request)
+            result.checkSuccess("获取App信息")
+            OPPOAppInfo(result.get("data").asJsonObject)
+        }
 
     /**
      * 获取上传的url

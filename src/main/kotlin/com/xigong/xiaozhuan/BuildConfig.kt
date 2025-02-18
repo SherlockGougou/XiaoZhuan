@@ -1,9 +1,9 @@
 package com.xigong.xiaozhuan
 
 import androidx.compose.ui.res.useResource
-import com.xigong.xiaozhuan.log.AppLogger
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.xigong.xiaozhuan.log.AppLogger
 
 object BuildConfig {
 

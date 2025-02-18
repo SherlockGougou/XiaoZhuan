@@ -1,7 +1,7 @@
 package com.xigong.xiaozhuan.page.upload
 
-import com.xigong.xiaozhuan.MoshiFactory
 import com.squareup.moshi.JsonClass
+import com.xigong.xiaozhuan.MoshiFactory
 
 @JsonClass(generateAdapter = false)
 data class UploadParam(

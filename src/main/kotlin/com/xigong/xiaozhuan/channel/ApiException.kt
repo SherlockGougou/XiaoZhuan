@@ -1,7 +1,5 @@
 package com.xigong.xiaozhuan.channel
 
-import kotlin.jvm.Throws
-
 class ApiException(
     code: Int,
     action: String,

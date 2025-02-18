@@ -1,8 +1,8 @@
 package com.xigong.xiaozhuan.channel.vivo
 
+import com.google.gson.JsonObject
 import com.xigong.xiaozhuan.channel.MarketInfo
 import com.xigong.xiaozhuan.channel.ReviewState
-import com.google.gson.JsonObject
 
 data class VIVOAppInfo(val obj: JsonObject) {
     /**
@@ -32,7 +32,11 @@ data class VIVOAppInfo(val obj: JsonObject) {
             4 -> ReviewState.Rejected
             else -> ReviewState.Unknown
         }
-        return MarketInfo(reviewState = state, lastVersionCode = versionCode, lastVersionName = versionName)
+        return MarketInfo(
+            reviewState = state,
+            lastVersionCode = versionCode,
+            lastVersionName = versionName
+        )
     }
 
 }

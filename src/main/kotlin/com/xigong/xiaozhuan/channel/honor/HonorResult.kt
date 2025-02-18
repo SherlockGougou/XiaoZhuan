@@ -1,8 +1,8 @@
 package com.xigong.xiaozhuan.channel.honor
 
-import com.xigong.xiaozhuan.channel.checkApiSuccess
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.xigong.xiaozhuan.channel.checkApiSuccess
 
 
 @JsonClass(generateAdapter = false)

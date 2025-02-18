@@ -1,8 +1,8 @@
 package com.xigong.xiaozhuan.config
 
-import com.xigong.xiaozhuan.MoshiFactory
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.xigong.xiaozhuan.MoshiFactory
 
 
 /**

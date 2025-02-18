@@ -6,13 +6,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class HonorUploadFile(
     @Json(name = "fileName")
-    val fileName:String,
+    val fileName: String,
     @Json(name = "fileType")
-    val fileType:Int,
+    val fileType: Int,
     @Json(name = "fileSize")
-    val fileSize:Long,
+    val fileSize: Long,
     @Json(name = "fileSha256")
-    val fileSha256:String,
+    val fileSha256: String,
 )
 
 
