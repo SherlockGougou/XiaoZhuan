@@ -77,6 +77,8 @@ data class ApkConfig(
         val apkDir: String? = null,
         @Json(name = "ignoreVersion")
         val ignoreVersion: Boolean = false,
+        @Json(name = "ignoreStatus")
+        val ignoreStatus: Boolean = false,
     )
 
     companion object {

@@ -40,6 +40,8 @@ class ApkPageState(val apkConfig: ApkConfig) {
 
     val ignoreVersionCheck = mutableStateOf(apkConfig.extension.ignoreVersion)
 
+    val ignoreStatusCheck = mutableStateOf(apkConfig.extension.ignoreStatus)
+
 
     val channels: List<ChannelTask> =
         ChannelRegistry.channels.filter { apkConfig.channelEnable(it.channelName) }
@@ -183,11 +185,34 @@ class ApkPageState(val apkConfig: ApkConfig) {
     }
 
     /**
+     * 是否忽略状态检查
+     */
+    fun isIgnoreStatus() : Boolean {
+        return ignoreStatusCheck.value
+    }
+
+    /**
      * 设置忽略版本号
      */
     fun updateIgnoreVersion(checked: Boolean) {
         ignoreVersionCheck.value = checked
         val newExtension = apkConfig.extension.copy(ignoreVersion = checked)
+        scope.launch {
+            val configDao = ApkConfigDao()
+            try {
+                configDao.saveConfig(apkConfig.copy(extension = newExtension))
+            } catch (e: Exception) {
+                AppLogger.error(LOG_TAG, "更新Apk配置失败", e)
+            }
+        }
+    }
+
+    /**
+     * 设置忽略状态
+     */
+    fun updateIgnoreStatus(checked: Boolean) {
+        ignoreStatusCheck.value = checked
+        val newExtension = apkConfig.extension.copy(ignoreStatus = checked)
         scope.launch {
             val configDao = ApkConfigDao()
             try {
@@ -208,6 +233,9 @@ class ApkPageState(val apkConfig: ApkConfig) {
         val task = taskLaunchers.firstOrNull { it.name == channelName } ?: return false
         val marketInfo = (task.getMarketState().value as? MarketState.Success)?.info
         val apkInfo = getApkInfoState().value
+        if (isIgnoreStatus()) {
+            return true
+        }
         if (marketInfo != null && !marketInfo.enableSubmit) {
             message?.set("应用市场审核中，或状态异常，无法上传新版本")
             return false

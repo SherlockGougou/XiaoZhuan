@@ -72,7 +72,7 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                Spacer(Modifier.width(25.dp).align(Alignment.CenterVertically))
+                Spacer(Modifier.width(45.dp).align(Alignment.CenterVertically))
                 Text(
                     "忽略版本检查",
                     color = Color.Black,
@@ -84,6 +84,28 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                     checked = viewModel.isIgnoreVersion(),
                     onCheckedChange = { checked ->
                         viewModel.updateIgnoreVersion(checked)
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = AppColors.primary,
+                        checkedTrackColor = AppColors.primary.copy(alpha = 0.3f),
+                        uncheckedThumbColor = Color.LightGray,
+                        uncheckedTrackColor = Color.LightGray
+                    ),
+                    modifier = Modifier.requiredWidthIn(60.dp).align(Alignment.CenterVertically),
+                    enabled = true
+                )
+                Spacer(Modifier.width(5.dp).align(Alignment.CenterVertically))
+                Text(
+                    "忽略状态检查",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Switch(
+                    checked = viewModel.isIgnoreStatus(),
+                    onCheckedChange = { checked ->
+                        viewModel.updateIgnoreStatus(checked)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = AppColors.primary,
