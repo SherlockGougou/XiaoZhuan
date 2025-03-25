@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-val appVersion = AppVersion(1, 1, 2)
+val appVersion = AppVersion(2, 0, 0)
 
 @Suppress("SpellCheckingInspection")
 val packageId = "com.xigong.xiaozhuan"
