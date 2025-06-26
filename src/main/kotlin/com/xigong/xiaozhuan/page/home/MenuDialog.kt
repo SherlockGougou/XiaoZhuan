@@ -79,7 +79,8 @@ interface MenuDialogListener {
 
 @Composable
 private fun item(title: String, color: Color = AppColors.fontBlack, onClick: () -> Unit) {
-    Box(contentAlignment = Alignment.Center, modifier = Modifier
+    Box(
+        contentAlignment = Alignment.Center, modifier = Modifier
         .fillMaxWidth()
         .clickable {
             onClick()

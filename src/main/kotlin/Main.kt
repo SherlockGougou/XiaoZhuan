@@ -42,7 +42,8 @@ fun main() {
             RootWindow(state = state, closeClick = { exitDialog = true }) {
                 AppNavigation()
                 if (exitDialog) {
-                    ConfirmDialog("确定退出软件吗？",
+                    ConfirmDialog(
+                        "确定退出软件吗？",
                         onConfirm = {
                             exitDialog = false
                             AppLogger.info("main", "App关闭")

@@ -33,7 +33,7 @@ public interface ChunkSection extends Chunk {
     /**
      * Read the 'header' part of the section.
      */
-    public void readHeader(IntReader inputReader) throws IOException;
+    void readHeader(IntReader inputReader) throws IOException;
 
     /**
      * Read the
@@ -41,6 +41,6 @@ public interface ChunkSection extends Chunk {
      * @param inputReader
      * @throws IOException
      */
-    public void readSection(IntReader inputReader) throws IOException;
+    void readSection(IntReader inputReader) throws IOException;
 
 }

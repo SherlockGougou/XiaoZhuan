@@ -2,7 +2,7 @@ package com.xigong.xiaozhuan.channel.oppo
 
 import java.io.IOException
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Collections
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 

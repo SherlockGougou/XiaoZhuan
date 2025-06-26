@@ -27,7 +27,6 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Switch
-import androidx.compose.material.SwitchColors
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -145,7 +144,7 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                         .weight(1f)
                 ) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    viewModel.channels.withIndex().forEach { (index, chan) ->
+                    viewModel.channels.withIndex().forEach { (_, chan) ->
                         val selected = viewModel.selectedChannels.contains(chan.channelName)
                         val name = chan.channelName
                         val taskLauncher = viewModel.taskLaunchers.first { it.name == name }
@@ -169,7 +168,8 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                 .padding(vertical = 14.dp)
         ) {
             val allSelected = viewModel.allChannelSelected()
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                 .clip(AppShapes.roundButton)
                 .clickable {
                     viewModel.selectAll(allSelected.not())
@@ -188,7 +188,8 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
             val uploadState = remember { mutableStateOf<UploadParam?>(null) }
             val uploadParam = uploadState.value
             if (uploadParam != null) {
-                showConfirmDialog(viewModel,
+                showConfirmDialog(
+                    viewModel,
                     onConfirm = {
                         startUpload(uploadParam)
                         uploadState.value = null

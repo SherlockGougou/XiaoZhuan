@@ -70,7 +70,8 @@ fun UpdateDescView(updateDesc: MutableState<String>) {
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
 
-            Image(painter = painterResource("input_clear.png"),
+            Image(
+                painter = painterResource("input_clear.png"),
                 contentDescription = "清空",
                 modifier = Modifier
                     .padding(10.dp)

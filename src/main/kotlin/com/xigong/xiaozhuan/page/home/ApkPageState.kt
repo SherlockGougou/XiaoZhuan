@@ -180,14 +180,14 @@ class ApkPageState(val apkConfig: ApkConfig) {
     /**
      * 是否忽略版本号
      */
-    fun isIgnoreVersion() : Boolean {
+    fun isIgnoreVersion(): Boolean {
         return ignoreVersionCheck.value
     }
 
     /**
      * 是否忽略状态检查
      */
-    fun isIgnoreStatus() : Boolean {
+    fun isIgnoreStatus(): Boolean {
         return ignoreStatusCheck.value
     }
 

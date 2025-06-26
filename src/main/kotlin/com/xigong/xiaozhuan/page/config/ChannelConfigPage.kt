@@ -25,7 +25,7 @@ fun ChannelConfigPage(
 ) {
     Column(
         modifier =
-        Modifier.verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState())
     ) {
         CheckboxRow(
             modifier = Modifier.padding(vertical = 8.dp),

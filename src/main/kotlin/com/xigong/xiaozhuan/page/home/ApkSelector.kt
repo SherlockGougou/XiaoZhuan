@@ -103,7 +103,8 @@ private fun item(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Box(contentAlignment = Alignment.CenterStart, modifier = Modifier
+    Box(
+        contentAlignment = Alignment.CenterStart, modifier = Modifier
         .clip(AppShapes.roundButton)
         .clickable { onClick() }
         .then(modifier)

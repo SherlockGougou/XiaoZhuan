@@ -67,7 +67,7 @@ fun UploadPage(uploadParam: UploadParam, onDismiss: () -> Unit) {
         val uploadSuccess = launchers.all { it.getSubmitState().value?.success == true }
         val uploadFail =
             launchers.all { it.getSubmitState().value?.finish == true } && !uploadSuccess
-        val uploading = !uploadFail && !uploadSuccess
+        !uploadFail && !uploadSuccess
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier.padding(40.dp)

@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-val appVersion = AppVersion(2, 1, 0)
+val appVersion = AppVersion(3, 0, 0)
 
 @Suppress("SpellCheckingInspection")
 val packageId = "com.xigong.xiaozhuan"
@@ -17,10 +17,9 @@ val appName = "多平台一键上架"
 @Suppress("SpellCheckingInspection")
 val appNameEn = "XiaoZhuan"
 
-println("当前版本:v${appVersion.versionName} (${appVersion.versionCode})")
+println("当前版本: v${appVersion.versionName} (${appVersion.versionCode})")
 
 repositories {
-//    maven("https://maven.aliyun.com/repository/public")
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
@@ -40,20 +39,16 @@ dependencies {
     implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha02")
     // Enables FileKit without Compose dependencies
     implementation("io.github.vinceglb:filekit-core:0.6.2")
-
     // Enables FileKit with Composable utilities
     implementation("io.github.vinceglb:filekit-compose:0.6.2")
-
 }
 
 // 小米应用市场
 dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
-//    implementation("net.sf.json-lib:json-lib:2.2.3")
     implementation("commons-codec:commons-codec:1.4")
     implementation("org.bouncycastle:bcprov-jdk15on:1.62")
 }
-
 
 compose.desktop {
     application {
@@ -71,7 +66,6 @@ compose.desktop {
                 targetFormats(TargetFormat.Dmg)
             }
             outputBaseDir.set(project.buildDir.resolve("packages"))
-//            includeAllModules = true
             modules("java.instrument", "java.naming", "java.sql", "jdk.unsupported")
             packageName = appName
             packageVersion = appVersion.versionName
@@ -97,7 +91,6 @@ compose.desktop {
         }
     }
 }
-
 
 tasks.named("processResources") {
     doLast {
@@ -134,7 +127,6 @@ tasks.register("packageMac") {
         print("The distribution is written to ${packageFile.absolutePath}")
     }
 }
-
 
 /**
  * 生成BuildConfig配置文件

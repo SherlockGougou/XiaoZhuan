@@ -136,12 +136,13 @@ fun CheckboxRow(
     check: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier
-        .clip(AppShapes.roundButton)
-        .fillMaxWidth()
-        .clickable {
-            onCheckedChange(check.not())
-        }) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = modifier
+            .clip(AppShapes.roundButton)
+            .fillMaxWidth()
+            .clickable {
+                onCheckedChange(check.not())
+            }) {
         Checkbox(
             check,
             onCheckedChange = onCheckedChange,

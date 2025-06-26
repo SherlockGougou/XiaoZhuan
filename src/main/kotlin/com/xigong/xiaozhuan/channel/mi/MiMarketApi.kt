@@ -4,7 +4,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.xigong.xiaozhuan.OkHttpFactory
 import com.xigong.xiaozhuan.channel.checkApiSuccess
-import com.xigong.xiaozhuan.util.*
+import com.xigong.xiaozhuan.util.FileUtil
+import com.xigong.xiaozhuan.util.ProgressBody
+import com.xigong.xiaozhuan.util.ProgressChange
+import com.xigong.xiaozhuan.util.getJsonResult
+import com.xigong.xiaozhuan.util.getTextResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -15,7 +19,6 @@ import org.apache.commons.codec.digest.DigestUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import java.util.*
 
 
 /**

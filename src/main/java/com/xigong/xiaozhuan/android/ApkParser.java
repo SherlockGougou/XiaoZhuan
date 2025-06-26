@@ -1,7 +1,9 @@
 package com.xigong.xiaozhuan.android;
 
 import android.content.res.AXMLResource;
+
 import com.xigong.xiaozhuan.util.ApkInfo;
+
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -51,7 +53,7 @@ public class ApkParser {
             Objects.requireNonNull(xml);
             return xml;
         } catch (IOException e) {
-            throw new RuntimeException("解析版本号失败,"+apkFile, e);
+            throw new RuntimeException("解析版本号失败," + apkFile, e);
         }
     }
 

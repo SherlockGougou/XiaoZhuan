@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright 2015 Red Naga
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +18,13 @@ package android.content.res.chunk;
 import android.content.res.IntReader;
 import android.content.res.chunk.sections.ResourceSection;
 import android.content.res.chunk.sections.StringSection;
-import android.content.res.chunk.types.*;
+import android.content.res.chunk.types.AXMLHeader;
+import android.content.res.chunk.types.Buffer;
+import android.content.res.chunk.types.Chunk;
+import android.content.res.chunk.types.EndTag;
+import android.content.res.chunk.types.NameSpace;
+import android.content.res.chunk.types.StartTag;
+import android.content.res.chunk.types.TextTag;
 
 import java.io.IOException;
 

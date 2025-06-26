@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright 2015 Red Naga
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,24 +35,24 @@ public interface Chunk {
      * @param reader
      * @throws IOException
      */
-    public void readHeader(IntReader reader) throws IOException;
+    void readHeader(IntReader reader) throws IOException;
 
     /**
      * @return the ChunkType for the current Chunk
      */
-    public ChunkType getChunkType();
+    ChunkType getChunkType();
 
     /**
      * @return the int size of the ChunkType
      */
-    public int getSize();
+    int getSize();
 
     // XXX: Not sure this needs to exist
 
     /**
      * @return a String representation of the Chunk
      */
-    public String toString();
+    String toString();
 
     /**
      * @param stringSection
@@ -60,13 +60,13 @@ public interface Chunk {
      * @param indent
      * @return a String representation in XML form
      */
-    public String toXML(StringSection stringSection, ResourceSection resourceSection, int indent);
+    String toXML(StringSection stringSection, ResourceSection resourceSection, int indent);
 
     /**
      * Get the a byte[] for the chunk
      *
      * @return
      */
-    public byte[] toBytes();
+    byte[] toBytes();
 
 }

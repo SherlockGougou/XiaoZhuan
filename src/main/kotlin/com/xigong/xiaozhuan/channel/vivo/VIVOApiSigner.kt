@@ -39,7 +39,7 @@ object VIVOApiSigner {
     private fun getUrlParamsFromMap(paramsMap: Map<String, String>): String {
         val keysList: List<String> = ArrayList(paramsMap.keys)
         Collections.sort(keysList)
-        val sb = StringBuilder()
+        StringBuilder()
         val paramList: MutableList<String> = ArrayList()
         for (key in keysList) {
             val `object` = paramsMap[key] ?: continue

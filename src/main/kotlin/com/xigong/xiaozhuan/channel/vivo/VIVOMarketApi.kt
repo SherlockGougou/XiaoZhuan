@@ -102,7 +102,7 @@ class VIVOMarketApi(
 
         val msg = get("msg")?.asString ?: "未知"
         // VIVO 的接口，并没有提供message的字段
-        val message = "请浏览 https://dev.vivo.com.cn/documentCenter/doc/330 对照code码查看信息"
+        "请浏览 https://dev.vivo.com.cn/documentCenter/doc/330 对照code码查看信息"
         checkApiSuccess(code, 0, action, msg)
         checkApiSuccess(subCode, 0, action, msg)
     }
