@@ -9,7 +9,7 @@ class MiChannelTask : ChannelTask() {
 
     override val channelName: String = "小米"
 
-    override val fileNameIdentify: String = "MI"
+    override val fileNameIdentify: String = "xiaomi"
 
     private var marketClient: MiMarketClient? = null
 

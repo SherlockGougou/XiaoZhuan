@@ -9,7 +9,7 @@ class VIVOChannelTask : ChannelTask() {
 
     override val channelName: String = "VIVO"
 
-    override val fileNameIdentify: String = "VIVO"
+    override val fileNameIdentify: String = "vivo"
 
     override val paramDefine: List<Param> = listOf(ACCESS_KEY, ACCESS_SECRET)
 

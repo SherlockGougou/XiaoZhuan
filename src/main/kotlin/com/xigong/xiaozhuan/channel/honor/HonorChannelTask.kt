@@ -11,7 +11,7 @@ class HonorChannelTask : ChannelTask() {
 
     override val channelName: String = "荣耀"
 
-    override val fileNameIdentify: String = "HONOR"
+    override val fileNameIdentify: String = "honor"
 
     override val paramDefine: List<Param> = listOf(
         CLIENT_ID,

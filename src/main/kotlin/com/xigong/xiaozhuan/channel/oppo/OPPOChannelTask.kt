@@ -9,7 +9,7 @@ class OPPOChannelTask : ChannelTask() {
 
     override val channelName: String = "OPPO"
 
-    override val fileNameIdentify: String = "OPPO"
+    override val fileNameIdentify: String = "oppo"
 
     override val paramDefine: List<Param> = listOf(CLIENT_ID_PARAM, CLIENT_SECRET_PARAM)
 

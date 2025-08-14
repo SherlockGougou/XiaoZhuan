@@ -11,7 +11,7 @@ class HuaweiChannelTask : ChannelTask() {
 
     override val channelName: String = "华为"
 
-    override val fileNameIdentify: String = "HUAWEI"
+    override val fileNameIdentify: String = "huawei"
 
     override val paramDefine: List<Param> = listOf(CLIENT_ID, CLIENT_SECRET)
 
