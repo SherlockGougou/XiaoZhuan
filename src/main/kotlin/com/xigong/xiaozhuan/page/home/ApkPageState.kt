@@ -10,23 +10,27 @@ import com.xigong.xiaozhuan.AppPath
 import com.xigong.xiaozhuan.channel.ChannelRegistry
 import com.xigong.xiaozhuan.channel.ChannelTask
 import com.xigong.xiaozhuan.channel.MarketState
+import com.xigong.xiaozhuan.channel.ReviewState
 import com.xigong.xiaozhuan.channel.TaskLauncher
 import com.xigong.xiaozhuan.config.ApkConfig
 import com.xigong.xiaozhuan.config.ApkConfigDao
 import com.xigong.xiaozhuan.log.AppLogger
+import com.xigong.xiaozhuan.notify.FeishuWebhook
 import com.xigong.xiaozhuan.page.upload.UploadParam
 import com.xigong.xiaozhuan.util.ApkInfo
 import com.xigong.xiaozhuan.util.FileSelector
 import com.xigong.xiaozhuan.util.FileUtil
 import com.xigong.xiaozhuan.util.getApkInfo
 import com.xigong.xiaozhuan.widget.Toast
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.io.File
+import kotlin.math.max
 
 class ApkPageState(val apkConfig: ApkConfig) {
 
@@ -42,6 +46,12 @@ class ApkPageState(val apkConfig: ApkConfig) {
 
     val ignoreStatusCheck = mutableStateOf(apkConfig.extension.ignoreStatus)
 
+    // 自动刷新设置
+    val autoRefreshEnabled = mutableStateOf(apkConfig.extension.autoRefreshEnabled)
+    val autoRefreshMinutes =
+        mutableStateOf(normalizeInterval(apkConfig.extension.autoRefreshMinutes))
+
+    private var autoRefreshJob: Job? = null
 
     val channels: List<ChannelTask> =
         ChannelRegistry.channels.filter { apkConfig.channelEnable(it.channelName) }
@@ -65,6 +75,8 @@ class ApkPageState(val apkConfig: ApkConfig) {
     init {
         AppLogger.info(LOG_TAG, "init")
         loadMarketState()
+        // 根据配置启动自动刷新
+        startOrStopAutoRefresh()
     }
 
 
@@ -100,14 +112,91 @@ class ApkPageState(val apkConfig: ApkConfig) {
         val apkConfig = requireNotNull(apkConfig)
         scope.launch {
             loadingMarkState = true
+            // 刷新前记录华为当前状态
+            val huaweiLauncher = taskLaunchers.firstOrNull { it.name == "华为" }
+            val oldHuaweiState = (huaweiLauncher?.getMarketState()?.value as? MarketState.Success)?.info?.reviewState
             supervisorScope {
                 taskLaunchers.forEach {
                     it.setChannelParam(apkConfig.channels)
-                    async { it.loadMarketState(apkConfig.applicationId) }
+                    launch { it.loadMarketState(apkConfig.applicationId) }
                 }
             }
             loadingMarkState = false
             updateSelectChannel()
+            // 刷新后检查华为状态变化
+            val newHuaweiState = (huaweiLauncher?.getMarketState()?.value as? MarketState.Success)?.info?.reviewState
+            if (oldHuaweiState == ReviewState.UnderReview && newHuaweiState != null && newHuaweiState != ReviewState.UnderReview) {
+                val text = "华为应用市场审核结果变更为：${newHuaweiState.desc}"
+                scope.launch { FeishuWebhook.sendText(FEISHU_WEBHOOK_URL, text) }
+            }
+        }
+    }
+
+    /**
+     * 自动刷新触发，带节流控制
+     */
+    private fun tryAutoRefresh() {
+        val now = System.currentTimeMillis()
+        val diff = now - lastUpdateMarketStateTime
+        if (!loadingMarkState && diff >= THROTTLE_MILLIS) {
+            loadMarketState()
+        } else {
+            AppLogger.info(LOG_TAG, "跳过自动刷新：loading=$loadingMarkState, 距上次=${diff}ms")
+        }
+    }
+
+    private fun startOrStopAutoRefresh() {
+        autoRefreshJob?.cancel()
+        if (autoRefreshEnabled.value) {
+            val interval = autoRefreshMinutes.value
+            autoRefreshJob = scope.launch {
+                // 首次尝试：尊重节流
+                tryAutoRefresh()
+                while (isActive && autoRefreshEnabled.value) {
+                    val delayMillis = max(1, interval * 60_000)
+                    delay(delayMillis.toLong())
+                    tryAutoRefresh()
+                }
+            }
+            AppLogger.info(LOG_TAG, "已启动自动刷新，间隔=${interval}分钟")
+        } else {
+            AppLogger.info(LOG_TAG, "已关闭自动刷新")
+        }
+    }
+
+    fun updateAutoRefreshEnabled(enabled: Boolean) {
+        autoRefreshEnabled.value = enabled
+        persistExtension(apkConfig.extension.copy(autoRefreshEnabled = enabled))
+        startOrStopAutoRefresh()
+        Toast.show(if (enabled) "已开启自动刷新" else "已关闭自动刷新")
+    }
+
+    fun updateAutoRefreshMinutes(minutes: Int) {
+        val m = normalizeInterval(minutes)
+        autoRefreshMinutes.value = m
+        persistExtension(apkConfig.extension.copy(autoRefreshMinutes = m))
+        // 变更间隔需要重启任务
+        startOrStopAutoRefresh()
+        Toast.show("自动刷新间隔：${m}分钟")
+    }
+
+    private fun normalizeInterval(m: Int): Int {
+        // 仅允许 2/5/10/30
+        return when (m) {
+            2, 5, 10, 30 -> m
+            else -> 5
+        }
+    }
+
+    private fun persistExtension(newExt: ApkConfig.Extension) {
+        val newConfig = apkConfig.copy(extension = newExt)
+        scope.launch {
+            val configDao = ApkConfigDao()
+            try {
+                configDao.saveConfig(newConfig)
+            } catch (e: Exception) {
+                AppLogger.error(LOG_TAG, "更新Apk配置失败", e)
+            }
         }
     }
 
@@ -130,7 +219,9 @@ class ApkPageState(val apkConfig: ApkConfig) {
         val apkDir = apkDirState.value ?: return
         val newExtension = apkConfig.extension.copy(
             apkDir = apkDir.absolutePath,
-            updateDesc = updateDesc
+            updateDesc = updateDesc,
+            autoRefreshEnabled = autoRefreshEnabled.value,
+            autoRefreshMinutes = autoRefreshMinutes.value
         )
         scope.launch {
             val configDao = ApkConfigDao()
@@ -331,6 +422,8 @@ class ApkPageState(val apkConfig: ApkConfig) {
 
     companion object {
         private const val LOG_TAG = "应用界面"
+        private const val THROTTLE_MILLIS = 30_000L
+        private const val FEISHU_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/0319beba-4423-4c25-89f9-0ca46fe79f65"
     }
 
 

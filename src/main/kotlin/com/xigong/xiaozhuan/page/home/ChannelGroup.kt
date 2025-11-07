@@ -1,6 +1,5 @@
 package com.xigong.xiaozhuan.page.home
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
@@ -26,6 +25,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
@@ -64,25 +64,19 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
     ) {
         Column(modifier = Modifier.weight(1f).fillMaxWidth()) {
             Row(modifier = Modifier.fillMaxWidth()) {
+                // 定时刷新开关
                 Text(
-                    "渠道",
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-                Spacer(Modifier.width(45.dp).align(Alignment.CenterVertically))
-                Text(
-                    "忽略版本检查",
+                    "定时刷新",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
+                val enabled = viewModel.autoRefreshEnabled.value
                 Switch(
-                    checked = viewModel.isIgnoreVersion(),
+                    checked = enabled,
                     onCheckedChange = { checked ->
-                        viewModel.updateIgnoreVersion(checked)
+                        viewModel.updateAutoRefreshEnabled(checked)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = AppColors.primary,
@@ -93,28 +87,46 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                     modifier = Modifier.requiredWidthIn(60.dp).align(Alignment.CenterVertically),
                     enabled = true
                 )
-                Spacer(Modifier.width(5.dp).align(Alignment.CenterVertically))
-                Text(
-                    "忽略状态检查",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-                Switch(
-                    checked = viewModel.isIgnoreStatus(),
-                    onCheckedChange = { checked ->
-                        viewModel.updateIgnoreStatus(checked)
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = AppColors.primary,
-                        checkedTrackColor = AppColors.primary.copy(alpha = 0.3f),
-                        uncheckedThumbColor = Color.LightGray,
-                        uncheckedTrackColor = Color.LightGray
-                    ),
-                    modifier = Modifier.requiredWidthIn(60.dp).align(Alignment.CenterVertically),
-                    enabled = true
-                )
+                Spacer(Modifier.width(6.dp).align(Alignment.CenterVertically))
+                // 间隔下拉
+                var showIntervalMenu by remember { mutableStateOf(false) }
+                val minutes = viewModel.autoRefreshMinutes.value
+                val intervalText = "${minutes}分钟"
+                Box(modifier = Modifier.align(Alignment.CenterVertically)) {
+                    Text(
+                        intervalText,
+                        color = if (enabled) AppColors.primary else AppColors.fontGray,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .clip(AppShapes.roundButton)
+                            .background(if (enabled) AppColors.auxiliary else Color(0xFFF0F0F0))
+                            .clickable(enabled = enabled) { showIntervalMenu = true }
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                    )
+                    if (showIntervalMenu) {
+                        DropdownMenu(true, onDismissRequest = { showIntervalMenu = false }) {
+                            @Composable
+                            fun itemOf(m: Int) {
+                                Text(
+                                    text = "${m}分钟",
+                                    color = AppColors.fontBlack,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            viewModel.updateAutoRefreshMinutes(m)
+                                            showIntervalMenu = false
+                                        }
+                                        .padding(horizontal = 12.dp, vertical = 10.dp)
+                                )
+                            }
+                            itemOf(2)
+                            itemOf(5)
+                            itemOf(10)
+                            itemOf(30)
+                        }
+                    }
+                }
                 Spacer(Modifier.weight(1f))
                 Box(modifier = Modifier.size(40.dp).align(Alignment.CenterVertically)) {
                     if (viewModel.loadingMarkState) {
@@ -167,24 +179,6 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
             modifier = Modifier.fillMaxWidth()
                 .padding(vertical = 14.dp)
         ) {
-            val allSelected = viewModel.allChannelSelected()
-            Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                .clip(AppShapes.roundButton)
-                .clickable {
-                    viewModel.selectAll(allSelected.not())
-                }
-                .padding(end = 12.dp)) {
-                Checkbox(
-                    allSelected,
-                    onCheckedChange = { all ->
-                        viewModel.selectAll(all)
-                    },
-                    colors = CheckboxDefaults.colors(checkedColor = AppColors.primary)
-                )
-                Text("全选")
-            }
-
             val uploadState = remember { mutableStateOf<UploadParam?>(null) }
             val uploadParam = uploadState.value
             if (uploadParam != null) {
@@ -198,19 +192,55 @@ fun ChannelGroup(viewModel: ApkPageState, startUpload: (UploadParam) -> Unit) {
                     }
                 )
             }
-            Button(
-                colors = ButtonDefaults.buttonColors(AppColors.primary),
-                modifier = Modifier.align(Alignment.Center),
-                onClick = {
-                    uploadState.value = viewModel.startDispatch()
-                }
+            val allSelected = viewModel.allChannelSelected()
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                    .padding(end = 12.dp)
             ) {
-
-                Text(
-                    "发布更新",
-                    color = Color.White,
-                    modifier = Modifier.padding(horizontal = 40.dp)
+                Checkbox(
+                    allSelected,
+                    onCheckedChange = { all ->
+                        viewModel.selectAll(all)
+                    },
+                    colors = CheckboxDefaults.colors(checkedColor = AppColors.primary)
                 )
+                Text("全选")
+                Spacer(Modifier.width(20.dp).align(Alignment.CenterVertically))
+                Text(
+                    "忽略状态检查",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Switch(
+                    checked = viewModel.isIgnoreStatus(),
+                    onCheckedChange = { checked ->
+                        viewModel.updateIgnoreStatus(checked)
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = AppColors.primary,
+                        checkedTrackColor = AppColors.primary.copy(alpha = 0.3f),
+                        uncheckedThumbColor = Color.LightGray,
+                        uncheckedTrackColor = Color.LightGray
+                    ),
+                    modifier = Modifier.requiredWidthIn(60.dp).align(Alignment.CenterVertically),
+                    enabled = true
+                )
+                Spacer(Modifier.weight(1f))
+                Button(
+                    colors = ButtonDefaults.buttonColors(AppColors.primary),
+                    onClick = {
+                        uploadState.value = viewModel.startDispatch()
+                    }
+                ) {
+
+                    Text(
+                        "发布更新",
+                        color = Color.White,
+                        modifier = Modifier.padding(horizontal = 40.dp)
+                    )
+                }
             }
         }
     }
@@ -257,19 +287,6 @@ private fun showConfirmDialog(
     )
 }
 
-
-@Preview
-@Composable
-private fun ChannelViewPreview() {
-    Column(modifier = Modifier.background(AppColors.pageBackground).padding(10.dp)) {
-        ChannelView(
-            true,
-            name = "华为",
-            desc = "星题库-v5.30.0-HUAWEI.apk",
-            marketState = null,
-            onCheckChange = {})
-    }
-}
 
 @Composable
 private fun ChannelView(
@@ -348,5 +365,3 @@ private fun ChannelView(
         }
     }
 }
-
-

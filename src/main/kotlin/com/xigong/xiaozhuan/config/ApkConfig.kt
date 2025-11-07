@@ -79,6 +79,12 @@ data class ApkConfig(
         val ignoreVersion: Boolean = false,
         @Json(name = "ignoreStatus")
         val ignoreStatus: Boolean = false,
+        /** 是否开启自动刷新 */
+        @Json(name = "autoRefreshEnabled")
+        val autoRefreshEnabled: Boolean = false,
+        /** 自动刷新间隔，单位：分钟，可选: 2,5,10,30 */
+        @Json(name = "autoRefreshMinutes")
+        val autoRefreshMinutes: Int = 5,
     )
 
     companion object {
