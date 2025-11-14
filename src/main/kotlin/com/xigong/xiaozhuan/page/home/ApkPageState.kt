@@ -112,9 +112,11 @@ class ApkPageState(val apkConfig: ApkConfig) {
         val apkConfig = requireNotNull(apkConfig)
         scope.launch {
             loadingMarkState = true
-            // 刷新前记录华为当前状态
-            val huaweiLauncher = taskLaunchers.firstOrNull { it.name == "华为" }
-            val oldHuaweiState = (huaweiLauncher?.getMarketState()?.value as? MarketState.Success)?.info?.reviewState
+            // 刷新前记录所有渠道当前审核状态
+            val oldReviewStates: Map<String, ReviewState?> = taskLaunchers.associate { launcher ->
+                val state = (launcher.getMarketState().value as? MarketState.Success)?.info?.reviewState
+                launcher.name to state
+            }
             supervisorScope {
                 taskLaunchers.forEach {
                     it.setChannelParam(apkConfig.channels)
@@ -123,11 +125,19 @@ class ApkPageState(val apkConfig: ApkConfig) {
             }
             loadingMarkState = false
             updateSelectChannel()
-            // 刷新后检查华为状态变化
-            val newHuaweiState = (huaweiLauncher?.getMarketState()?.value as? MarketState.Success)?.info?.reviewState
-            if (oldHuaweiState == ReviewState.UnderReview && newHuaweiState != null && newHuaweiState != ReviewState.UnderReview) {
-                val text = "华为应用市场审核结果变更为：${newHuaweiState.desc}"
-                scope.launch { FeishuWebhook.sendText(FEISHU_WEBHOOK_URL, text) }
+            // 刷新后检查所有渠道审核状态变化
+            taskLaunchers.forEach { launcher ->
+                val newState = (launcher.getMarketState().value as? MarketState.Success)?.info?.reviewState
+                val oldState = oldReviewStates[launcher.name]
+                if (newState != null && oldState != newState) {
+                    // 发送飞书通知
+                    val text = if (oldState == null) {
+                        "${launcher.name}应用市场首次获取审核结果：${newState.desc}"
+                    } else {
+                        "${launcher.name}应用市场审核结果从${oldState.desc}变更为：${newState.desc}"
+                    }
+                    scope.launch { FeishuWebhook.sendText(FEISHU_WEBHOOK_URL, text) }
+                }
             }
         }
     }
